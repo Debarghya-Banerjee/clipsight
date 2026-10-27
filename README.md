@@ -23,7 +23,7 @@ Press **⇧⌘V** anywhere to open it.
 
 ## Install
 
-1. Download **Clipsight-1.0.dmg** from the [latest release](https://github.com/Debarghya-Banerjee/clipsight/releases/latest).
+1. Download **Clipsight-1.0.1.dmg** from the [latest release](https://github.com/Debarghya-Banerjee/clipsight/releases/latest).
 2. Open it and drag Clipsight onto the Applications folder.
 3. Open Clipsight from Applications. It lives in the menu bar.
 

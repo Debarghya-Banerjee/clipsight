@@ -125,19 +125,22 @@ enum Detector {
     // MARK: - Decoders
 
     static func prettyJSON(_ text: String) -> String? {
-        guard let data = text.data(using: .utf8),
-              let object = try? JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed]),
-              let pretty = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
-        else { return nil }
-        return String(decoding: pretty, as: UTF8.self)
+        reencodeJSON(text, options: [.prettyPrinted, .sortedKeys])
     }
 
     static func minifiedJSON(_ text: String) -> String? {
+        reencodeJSON(text, options: [])
+    }
+
+    /// Parses and re-encodes JSON. Writing must allow fragments as reading does: a bare number or
+    /// string such as `123` parses fine, and writing it without `.fragmentsAllowed` raises an
+    /// Objective-C exception that `try?` can't catch, which crashes the app.
+    private static func reencodeJSON(_ text: String, options: JSONSerialization.WritingOptions) -> String? {
         guard let data = text.data(using: .utf8),
               let object = try? JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed]),
-              let compact = try? JSONSerialization.data(withJSONObject: object, options: [.withoutEscapingSlashes])
+              let encoded = try? JSONSerialization.data(withJSONObject: object, options: options.union([.fragmentsAllowed, .withoutEscapingSlashes]))
         else { return nil }
-        return String(decoding: compact, as: UTF8.self)
+        return String(decoding: encoded, as: UTF8.self)
     }
 
     static func isJWT(_ text: String) -> Bool {
